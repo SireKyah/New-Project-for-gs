@@ -1,10 +1,10 @@
 // Class Selector
-const pieces = document.querySelector('.pieces');
+gameBoard = document.querySelector('.board');
 // Add players
-const whitePiece = 1;
-const blackPiece = -1;
+const redPiece = 1;
+const bluePiece = -1;
 let boardState = 0;
-let currentPlayer = null;
+let currentPlayer = redPiece;
 let squareColor = null;
 let occupied = null;
 // Add board
@@ -25,35 +25,55 @@ function renderBoard() {
         for (let j = 0; j < board[i].length; j++) {
             const classSelector = `.c${i}r${j}`;
             const square = document.querySelector(classSelector);
-            const blackPieceSelector = `blackPiece-c${i}r${j}`;
-            const whitePieceSelector = `whitePiece-c${i}r${j}`;
-
             // - check if a player is already occupying a board
             //  -- If yes check which colour is it and make a piece a out of that colour and place it in that "square"
-            if (board[i] / 2 && board[i][j] / 2) {
+            if ((i + j) % 2 === 0) {
                 square.style.backgroundColor = 'black';
                 squareColor = 'blackSquare';
             } else {
                 square.style.backgroundColor = 'white';
                 squareColor = 'whiteSquare';
             }
-            // Add The piece
-            if ((board[i][j] = blackPiece)) {
-                player1 = document.querySelector(blackPieceSelector);
-                occupied = player1;
-            } else if ((board[i][j] = whitePiece)) {
-                player2 = document.querySelector(whitePieceSelector);
-                occupied = player2;
-            } else {
-                occupied = 'empty';
+            if (board[i][j] === redPiece) {
+                square.style.backgroundColor = 'red';
+            } else if (board[i][j] === bluePiece) {
+                square.style.backgroundColor = 'blue';
             }
         }
     }
 }
+let playerMoving = false;
+let initialClick = null;
+gameBoard.addEventListener('click', (event) => {
+    const clickColumn = event.target.className[1];
+    const clickRow = event.target.className[3];
+    const pieceColour = board[clickColumn][clickRow];
+    console.log(playerMoving);
+    if (playerMoving) {
+        board[initialClick.column][initialClick.row] = 0;
+        board[clickColumn][clickRow] = currentPlayer;
+        console.log(clickColumn, clickRow);
+        renderBoard();
+        currentPlayer *= -1;
+        playerMoving = false;
+        initialClick = null;
+    }
+    if (currentPlayer === pieceColour) {
+        console.log('You can move');
+        playerMoving = true;
+        initialClick = { row: clickRow, column: clickColumn };
+    } else if (pieceColour === 0) {
+        console.log("There's No Piece");
+    } else if (currentPlayer !== pieceColour) {
+        console.log('Wrong Colour Mate');
+    }
+    console.log(board[clickColumn][clickRow]);
+});
+renderBoard();
+// Add The piece
 //   --- Then make it the next players turn
 //  -- If no make it that the "square" is empty.
 // - Move the pieces
-
 //  -- Move the pieces and delete the previous piece
 //  -- if pieces can eat a different colour pieces, move the new pieces behind the eaten pieces and remove the other pieces to the board and also the previous pieces.
 //   --- if pieces can eat more than one enemy pieces, eat all the enemy pieces and leave the piece that ate the enemy pieces behind the last enemy piece.
