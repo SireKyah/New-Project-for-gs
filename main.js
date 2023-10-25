@@ -70,6 +70,12 @@ gameBoard.addEventListener('click', (event) => {
     console.log(board[clickColumn][clickRow]);
 });
 renderBoard();
+
+// for taking piecess
+// -- see if current piece can go behind the other piece
+// -- if yes, take the current position of the currentPiece and move it behind the taken piece.
+// -- remove the taken piece and make it the next player turn
+
 // Add The piece
 //   --- Then make it the next players turn
 //  -- If no make it that the "square" is empty.
