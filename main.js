@@ -1,22 +1,23 @@
 // Class Selector
 gameBoard = document.querySelector('.board');
 // Add players
-const redPiece = 1;
-const bluePiece = -1;
+const redPiece = -1;
+const bluePiece = 1;
 let boardState = 0;
 let currentPlayer = redPiece;
 let squareColor = null;
 let occupied = null;
 // Add board
+// prettier-ignore
 let board = [
-    [0, -1, 0, -1, 0, -1, 0, -1],
-    [-1, 0, -1, 0, -1, 0, -1, 0],
-    [0, -1, 0, -1, 0, -1, 0, -1],
-    [0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0],
-    [1, 0, 1, 0, 1, 0, 1, 0],
-    [0, 1, 0, 1, 0, 1, 0, 1],
-    [1, 0, 1, 0, 1, 0, 1, 0],
+  [ 0,  1,  0,  1,  0,  1,  0,  1],
+  [ 1,  0,  1,  0,  1,  0,  1,  0],
+  [ 0,  1,  0,  0,  0,  0,  0,  0],
+  [ 0,  0,  1,  0,  1,  0,  1,  0],
+  [ 0,  0,  0,  0,  0, -1,  0,  0],
+  [-1,  0, -1,  0,  0,  0, -1,  0],
+  [ 0, -1,  0, -1,  0, -1,  0, -1],
+  [-1,  0, -1,  0, -1,  0, -1,  0],
 ];
 // add render the board
 function renderBoard() {
@@ -44,21 +45,38 @@ function renderBoard() {
 }
 let playerMoving = false;
 let initialClick = null;
+let validMoves = [];
 gameBoard.addEventListener('click', (event) => {
-    const clickColumn = event.target.className[1];
-    const clickRow = event.target.className[3];
-    const pieceColour = board[clickColumn][clickRow];
-    console.log(playerMoving);
+    const clickRow = Number(event.target.className[1]);
+    const clickColumn = Number(event.target.className[3]);
+    const pieceColour = board[clickRow][clickColumn];
+
     if (playerMoving) {
-        board[initialClick.column][initialClick.row] = 0;
-        board[clickColumn][clickRow] = currentPlayer;
-        console.log(clickColumn, clickRow);
+        // clickRow clickColumn are valid
+        // based on validMoves
+        // find the object inside validMoves with clickRow and clickColumn
+        const validMove = validMoves.find((element) => {
+            return element.row === clickRow && element.column === clickColumn;
+        });
+        if (!validMove) {
+            console.log('cant do that');
+            return;
+        }
+        board[initialClick.row][initialClick.column] = 0;
+        board[clickRow][clickColumn] = currentPlayer;
+        if (validMove.capture) {
+            board[validMove.capture.row][validMove.capture.column] = 0;
+        }
         renderBoard();
         currentPlayer *= -1;
         playerMoving = false;
         initialClick = null;
+        return;
     }
-    if (currentPlayer === pieceColour) {
+
+    validMoves = findValidMoves(clickRow, clickColumn);
+    console.log(validMoves);
+    if (currentPlayer === pieceColour && validMoves.length) {
         console.log('You can move');
         playerMoving = true;
         initialClick = { row: clickRow, column: clickColumn };
@@ -66,10 +84,56 @@ gameBoard.addEventListener('click', (event) => {
         console.log("There's No Piece");
     } else if (currentPlayer !== pieceColour) {
         console.log('Wrong Colour Mate');
+    } else {
+        console.log('no valid moves');
     }
-    console.log(board[clickColumn][clickRow]);
 });
+
 renderBoard();
+
+function findValidMoves(row, column) {
+    const availMoves = [];
+    if (currentPlayer === -1) {
+        const move1 = [row - 1, column + 1];
+        const move2 = [row - 1, column - 1];
+
+        if (board[move1[0]][move1[1]] === 0) {
+            availMoves.push({ row: move1[0], column: move1[1] });
+        } else if (board[move1[0]][move1[1]] === 1) {
+            if (board[move1[0] - 1][move1[1] + 1] === 0) {
+                availMoves.push({
+                    row: move1[0] - 1,
+                    column: move1[1] + 1,
+                    capture: { row: move1[0], column: move1[1] },
+                });
+            }
+        }
+
+        if (board[move2[0]][move2[1]] === 0) {
+            availMoves.push({ row: move2[0], column: move2[1] });
+        } else if (board[move2[0]][move2[1]] === 1) {
+            if (board[move2[0] - 1][move2[1] - 1] === 0) {
+                availMoves.push({
+                    row: move2[0] - 1,
+                    column: move2[1] - 1,
+                    capture: { row: move2[0], column: move2[1] },
+                });
+            }
+        }
+    } else if (currentPlayer === 1) {
+        const move1 = [row + 1, column + 1];
+        const move2 = [row + 1, column - 1];
+
+        if (board[move1[0]][move1[1]] === 0) {
+            availMoves.push({ row: move1[0], column: move1[1] });
+        }
+
+        if (board[move2[0]][move2[1]] === 0) {
+            availMoves.push({ row: move2[0], column: move2[1] });
+        }
+    }
+    return availMoves;
+}
 
 // for taking piecess
 // -- see if current piece can go behind the other piece
