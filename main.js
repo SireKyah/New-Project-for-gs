@@ -14,10 +14,10 @@ let board = [
   [ 1,  0,  1,  0,  1,  0,  1,  0],
   [ 0,  1,  0,  0,  0,  0,  0,  0],
   [ 0,  0,  1,  0,  1,  0,  1,  0],
-  [ 0,  0,  0,  0,  0, -1,  0,  0],
-  [-1,  0, -1,  0,  0,  0, -1,  0],
+  [ 0,  0,  0, -1,  0, -1,  0,  0],
+  [-1,  0,  0,  0,  0,  0,  1,  0],
   [ 0, -1,  0, -1,  0, -1,  0, -1],
-  [-1,  0, -1,  0, -1,  0, -1,  0],
+  [-1,  0, -1,  0,  0,  0, -1,  0],
 ];
 // add render the board
 function renderBoard() {
@@ -97,10 +97,14 @@ function findValidMoves(row, column) {
         const move1 = [row - 1, column + 1];
         const move2 = [row - 1, column - 1];
 
+        // checks available move for the Red piece
         if (board[move1[0]][move1[1]] === 0) {
             availMoves.push({ row: move1[0], column: move1[1] });
+            // checks if the available move is the opposite colour
         } else if (board[move1[0]][move1[1]] === 1) {
+            // checks if the available moves behind the enemy piece is empty
             if (board[move1[0] - 1][move1[1] + 1] === 0) {
+                // capture the piece
                 availMoves.push({
                     row: move1[0] - 1,
                     column: move1[1] + 1,
@@ -126,10 +130,25 @@ function findValidMoves(row, column) {
 
         if (board[move1[0]][move1[1]] === 0) {
             availMoves.push({ row: move1[0], column: move1[1] });
+        } else if (board[move1[0]][move1[1]] === -1) {
+            if (board[move1[0] + 1][move1[1] + 1] === 0) {
+                availMoves.push({
+                    row: move1[0] + 1,
+                    column: move1[1] + 1,
+                    capture: { row: move1[0], column: move2[1] },
+                });
+            }
         }
-
         if (board[move2[0]][move2[1]] === 0) {
             availMoves.push({ row: move2[0], column: move2[1] });
+        } else if (board[move2[0]][move2[1]] === -1) {
+            if (board[move2[0] + 1][move2[1] - 1] === 0) {
+                availMoves.push({
+                    row: move2[0] + 1,
+                    column: move2[1] - 1,
+                    capture: { row: move2[0], column: move2[1] },
+                });
+            }
         }
     }
     return availMoves;
