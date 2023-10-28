@@ -1,5 +1,6 @@
 // Class Selector
 gameBoard = document.querySelector('.board');
+playerTurn = document.querySelector('.player-turn');
 // Add players
 const redPiece = -1;
 const bluePiece = 1;
@@ -10,14 +11,14 @@ let occupied = null;
 // Add board
 // prettier-ignore
 let board = [
+  [ 0,  1,  0,  0,  0,  0,  0,  1],
+  [ 1,  0,  1,  0, -1,  0,  1,  0],
   [ 0,  1,  0,  1,  0,  1,  0,  1],
-  [ 1,  0,  1,  0,  1,  0,  1,  0],
-  [ 0,  1,  0,  0,  0,  0,  0,  0],
-  [ 0,  0,  1,  0,  1,  0,  1,  0],
-  [ 0,  0,  0, -1,  0, -1,  0,  0],
-  [-1,  0,  0,  0,  0,  0,  1,  0],
+  [ 0,  0,  0,  0,  0,  0,  0,  0],
+  [ 0,  0,  0,  0,  0,  0,  0,  0],
+  [-1,  0, -1,  0, -1,  0, -1,  0],
   [ 0, -1,  0, -1,  0, -1,  0, -1],
-  [-1,  0, -1,  0,  0,  0, -1,  0],
+  [-1,  0, -1,  0, -1,  0, -1,  0],
 ];
 // add render the board
 function renderBoard() {
@@ -68,7 +69,16 @@ gameBoard.addEventListener('click', (event) => {
             board[validMove.capture.row][validMove.capture.column] = 0;
         }
         renderBoard();
+        if (clickRow === 7 || clickRow === 0) {
+            console.log(`${currentPlayer} you win`);
+            return;
+        }
         currentPlayer *= -1;
+        if (currentPlayer === 1) {
+            playerTurn.innerHTML = `Blue's Turn`;
+        } else if (currentPlayer === -1) {
+            playerTurn.innerHTML = `Red's Turn`;
+        }
         playerMoving = false;
         initialClick = null;
         return;
