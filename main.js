@@ -59,6 +59,7 @@ gameBoard.addEventListener('click', (event) => {
         const validMove = validMoves.find((element) => {
             return element.row === clickRow && element.column === clickColumn;
         });
+        console.log(validMove);
         if (!validMove) {
             console.log('cant do that');
             return;
@@ -145,15 +146,14 @@ function findValidMoves(row, column) {
     } else if (currentPlayer === 1) {
         const move1 = [row + 1, column + 1];
         const move2 = [row + 1, column - 1];
-
         if (board[move1[0]][move1[1]] === 0) {
             availMoves.push({ row: move1[0], column: move1[1] });
-        } else if (move1[0] < 8 && [move1[0]][move1[1]] === -1) {
+        } else if (move1[0] < 8 && board[move1[0]][move1[1]] === -1) {
             if (board[move1[0] + 1][move1[1] + 1] === 0) {
                 availMoves.push({
                     row: move1[0] + 1,
                     column: move1[1] + 1,
-                    capture: { row: move1[0], column: move2[1] },
+                    capture: { row: move1[0], column: move1[1] },
                 });
             }
         }
