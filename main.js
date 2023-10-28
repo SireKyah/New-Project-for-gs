@@ -11,8 +11,8 @@ let occupied = null;
 // Add board
 // prettier-ignore
 let board = [
-  [ 0,  1,  0,  0,  0,  0,  0,  1],
-  [ 1,  0,  1,  0, -1,  0,  1,  0],
+  [ 0,  1,  0,  1,  0,  1,  0,  1],
+  [ 1,  0,  1,  0,  1,  0,  1,  0],
   [ 0,  1,  0,  1,  0,  1,  0,  1],
   [ 0,  0,  0,  0,  0,  0,  0,  0],
   [ 0,  0,  0,  0,  0,  0,  0,  0],
@@ -119,7 +119,7 @@ function findValidMoves(row, column) {
         if (board[move1[0]][move1[1]] === 0) {
             availMoves.push({ row: move1[0], column: move1[1] });
             // checks if the available move is the opposite colour
-        } else if (board[move1[0]][move1[1]] === 1) {
+        } else if (move1[0] && board[move1[0]][move1[1]] === 1) {
             // checks if the available moves behind the enemy piece is empty
             if (board[move1[0] - 1][move1[1] + 1] === 0) {
                 // capture the piece
@@ -133,7 +133,7 @@ function findValidMoves(row, column) {
 
         if (board[move2[0]][move2[1]] === 0) {
             availMoves.push({ row: move2[0], column: move2[1] });
-        } else if (board[move2[0]][move2[1]] === 1) {
+        } else if (move2[0] && board[move2[0]][move2[1]] === 1) {
             if (board[move2[0] - 1][move2[1] - 1] === 0) {
                 availMoves.push({
                     row: move2[0] - 1,
@@ -148,7 +148,7 @@ function findValidMoves(row, column) {
 
         if (board[move1[0]][move1[1]] === 0) {
             availMoves.push({ row: move1[0], column: move1[1] });
-        } else if (board[move1[0]][move1[1]] === -1) {
+        } else if (move1[0] < 8 && [move1[0]][move1[1]] === -1) {
             if (board[move1[0] + 1][move1[1] + 1] === 0) {
                 availMoves.push({
                     row: move1[0] + 1,
@@ -159,7 +159,7 @@ function findValidMoves(row, column) {
         }
         if (board[move2[0]][move2[1]] === 0) {
             availMoves.push({ row: move2[0], column: move2[1] });
-        } else if (board[move2[0]][move2[1]] === -1) {
+        } else if (move2[0] < 8 && board[move2[0]][move2[1]] === -1) {
             if (board[move2[0] + 1][move2[1] - 1] === 0) {
                 availMoves.push({
                     row: move2[0] + 1,
