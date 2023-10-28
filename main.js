@@ -69,15 +69,23 @@ gameBoard.addEventListener('click', (event) => {
             board[validMove.capture.row][validMove.capture.column] = 0;
         }
         renderBoard();
-        if (clickRow === 7 || clickRow === 0) {
-            console.log(`${currentPlayer} you win`);
+        if (clickRow === 7) {
+            playerTurn.innerHTML = 'Blue is the winner';
+            playerTurn.style.color = 'blue';
+            return;
+        }
+        if (clickRow === 0) {
+            playerTurn.innerHTML = 'Red is the winner';
+            playerTurn.style.color = 'red';
             return;
         }
         currentPlayer *= -1;
         if (currentPlayer === 1) {
             playerTurn.innerHTML = `Blue's Turn`;
+            playerTurn.style.color = 'blue';
         } else if (currentPlayer === -1) {
             playerTurn.innerHTML = `Red's Turn`;
+            playerTurn.style.color = 'red';
         }
         playerMoving = false;
         initialClick = null;
