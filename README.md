@@ -10,12 +10,6 @@ Checkers is played by two opponents on opposite sides of the game board. One pla
 
 -   You can play it in this link [Checkers](https://github.com/SireKyah/New-Project-for-gs).
 
-## Planning & Problem Solving
-
--   Talk about approach to the problem.
--   Add screenshots/drawings of doodles/plans during the planning phase.
--   Flow charts of app logic.
-
 ## Program Used
 
 -   Javascript
@@ -24,28 +18,11 @@ Checkers is played by two opponents on opposite sides of the game board. One pla
 
 ## Lesson Learnt
 
+-   Lots of DOM manipulations
+
 ## Future Features
 
-this is a paragraph ojvjhsljvsohvowhifbvlsdkvbavafv
-
-there must be space to count as a second paragraph `git add`
-
-## Second Heading
-
-> Bruhhhhh
-
-```js
-const bruh = 'you';
-console.log(bruh);
-```
-
--   [Google](https://google.com)
--   [style.css](style.css)
--   Itens 2
--   Items 3
-
-1. Number 1
-2. NUmber 2
-3. Number 3
-
-![](https://placedog.net/500)
+-   add a reset botton
+-   add a piece counter on each player
+-   implement the proper way of playing checkers
+-   add the proper way to win which is by eating every pieces

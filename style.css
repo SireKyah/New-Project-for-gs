@@ -20,7 +20,8 @@ body {
 .player-turn {
     text-align: center;
     margin-bottom: 10px;
-    color: red;
+    color: rgb(237, 104, 104);
+    font-size: 50px;
 }
 .title {
     text-align: center;
@@ -35,9 +36,9 @@ body {
 }
 
 .player1Piece {
-    background-color: red !important;
+    background-color: rgb(237, 104, 104) !important;
 }
 
 .player2Piece {
-    background-color: blue !important;
+    background-color: rgb(81, 81, 225) !important;
 }

@@ -37,9 +37,9 @@ function renderBoard() {
                 squareColor = 'whiteSquare';
             }
             if (board[i][j] === redPiece) {
-                square.style.backgroundColor = 'red';
+                square.style.backgroundColor = 'rgb(237, 104, 104)';
             } else if (board[i][j] === bluePiece) {
-                square.style.backgroundColor = 'blue';
+                square.style.backgroundColor = 'rgb(81, 81, 225)';
             }
         }
     }
@@ -72,12 +72,12 @@ gameBoard.addEventListener('click', (event) => {
         renderBoard();
         if (clickRow === 7) {
             playerTurn.innerHTML = 'Blue is the winner';
-            playerTurn.style.color = 'blue';
+            playerTurn.style.color = 'rgb(81, 81, 225)';
             return;
         }
         if (clickRow === 0) {
             playerTurn.innerHTML = 'Red is the winner';
-            playerTurn.style.color = 'red';
+            playerTurn.style.color = 'rgb(237, 104, 104)';
             return;
         }
         currentPlayer *= -1;
