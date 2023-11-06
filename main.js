@@ -108,69 +108,91 @@ gameBoard.addEventListener('click', (event) => {
     }
 });
 
-renderBoard();
-
 function findValidMoves(row, column) {
     const availMoves = [];
     if (currentPlayer === -1) {
-        const move1 = [row - 1, column + 1];
-        const move2 = [row - 1, column - 1];
+        const moves = [
+            { row: row - 1, column: column + 1, dir: 'ne' },
+            { row: row - 1, column: column - 1, dir: 'nw' },
+            { row: row + 1, column: column + 1, dir: 'se' },
+            { row: row + 1, column: column - 1, dir: 'sw' },
+        ];
 
-        // checks available move for the Red piece
-        if (board[move1[0]][move1[1]] === 0) {
-            availMoves.push({ row: move1[0], column: move1[1] });
-            // checks if the available move is the opposite colour
-        } else if (move1[0] && board[move1[0]][move1[1]] === 1) {
-            // checks if the available moves behind the enemy piece is empty
-            if (board[move1[0] - 1][move1[1] + 1] === 0) {
-                // capture the piece
-                availMoves.push({
-                    row: move1[0] - 1,
-                    column: move1[1] + 1,
-                    capture: { row: move1[0], column: move1[1] },
-                });
-            }
-        }
-
-        if (board[move2[0]][move2[1]] === 0) {
-            availMoves.push({ row: move2[0], column: move2[1] });
-        } else if (move2[0] && board[move2[0]][move2[1]] === 1) {
-            if (board[move2[0] - 1][move2[1] - 1] === 0) {
-                availMoves.push({
-                    row: move2[0] - 1,
-                    column: move2[1] - 1,
-                    capture: { row: move2[0], column: move2[1] },
-                });
+        for (let m of moves) {
+            const piece = board[m.row] && board[m.row][m.column];
+            if (piece === 0 && m.dir.startsWith('n')) {
+                delete m.dir;
+                availMoves.push(m);
+            } else if (m.row && piece === 1) {
+                let move;
+                if (m.dir === 'ne') {
+                    move = { row: m.row - 1, column: m.column + 1 };
+                } else if (m.dir === 'nw') {
+                    move = { row: m.row - 1, column: m.column - 1 };
+                } else if (m.dir === 'se') {
+                    move = { row: m.row + 1, column: m.column + 1 };
+                } else if (m.dir === 'sw') {
+                    move = { row: m.row + 1, column: m.column - 1 };
+                }
+                if (board[move.row][move.column] === 0) {
+                    delete m.dir;
+                    move.capture = m;
+                    availMoves.push(move);
+                }
             }
         }
     } else if (currentPlayer === 1) {
-        const move1 = [row + 1, column + 1];
-        const move2 = [row + 1, column - 1];
-        if (board[move1[0]][move1[1]] === 0) {
-            availMoves.push({ row: move1[0], column: move1[1] });
-        } else if (move1[0] < 8 && board[move1[0]][move1[1]] === -1) {
-            if (board[move1[0] + 1][move1[1] + 1] === 0) {
-                availMoves.push({
-                    row: move1[0] + 1,
-                    column: move1[1] + 1,
-                    capture: { row: move1[0], column: move1[1] },
-                });
-            }
-        }
-        if (board[move2[0]][move2[1]] === 0) {
-            availMoves.push({ row: move2[0], column: move2[1] });
-        } else if (move2[0] < 8 && board[move2[0]][move2[1]] === -1) {
-            if (board[move2[0] + 1][move2[1] - 1] === 0) {
-                availMoves.push({
-                    row: move2[0] + 1,
-                    column: move2[1] - 1,
-                    capture: { row: move2[0], column: move2[1] },
-                });
+        const moves = [
+            { row: row + 1, column: column - 1, dir: 'sw' },
+            { row: row + 1, column: column + 1, dir: 'se' },
+            { row: row - 1, column: column - 1, dir: 'nw' },
+            { row: row - 1, column: column + 1, dir: 'ne' },
+        ];
+
+        for (let m of moves) {
+            const piece = board[m.row] && board[m.row][m.column];
+            if (piece === 0 && m.dir.startsWith('s')) {
+                delete m.dir;
+                availMoves.push(m);
+            } else if (piece === -1) {
+                let move;
+                if (m.dir === 'nw') {
+                    move = { row: m.row - 1, column: m.column - 1 };
+                } else if (m.dir === 'ne') {
+                    move = { row: m.row - 1, column: m.column + 1 };
+                } else if (m.dir === 'sw') {
+                    move = { row: m.row + 1, column: m.column - 1 };
+                } else if (m.dir === 'se') {
+                    move = { row: m.row + 1, column: m.column + 1 };
+                }
+                if (board[move.row][move.column] === 0) {
+                    delete m.dir;
+                    move.capture = m;
+                    availMoves.push(move);
+                }
             }
         }
     }
     return availMoves;
 }
+
+function checkPieces() {
+    for (let i = 0; i < board.length; i++) {
+        for (let j = 0; j < board[i].length; j++) {
+            if (board[i][j] === -1) {
+                redPieceCounter++;
+            } else if (board[i][j] === 1) {
+                bluePieceCounter++;
+            }
+            if (redPieceCounter === 0) {
+                console.log('Blue Piece Won');
+            } else if (bluePieceCounter === 0) {
+                console.log('Red Piece Won');
+            }
+        }
+    }
+}
+renderBoard();
 
 // for taking piecess
 // -- see if current piece can go behind the other piece
