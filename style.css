@@ -23,6 +23,21 @@ body {
     color: rgb(237, 104, 104);
     font-size: 50px;
 }
+
+.red-player-piece {
+    text-align: start;
+    margin-bottom: 10px;
+    color: rgb(237, 104, 104);
+    font-size: 50px;
+}
+
+.blue-player-piece {
+    text-align: end;
+    margin-bottom: 10px;
+    color: rgb(68, 105, 224);
+    font-size: 50px;
+}
+
 .title {
     text-align: center;
 }

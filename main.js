@@ -1,6 +1,9 @@
 // Class Selector
 gameBoard = document.querySelector('.board');
 playerTurn = document.querySelector('.player-turn');
+redPlayerPiece = document.querySelector('.red-player-piece');
+bluePlayerPiece = document.querySelector('.blue-player-piece');
+
 // Add players
 const redPiece = -1;
 const bluePiece = 1;
@@ -70,16 +73,17 @@ gameBoard.addEventListener('click', (event) => {
             board[validMove.capture.row][validMove.capture.column] = 0;
         }
         renderBoard();
-        if (clickRow === 7) {
-            playerTurn.innerHTML = 'Blue is the winner';
-            playerTurn.style.color = 'rgb(81, 81, 225)';
-            return;
-        }
-        if (clickRow === 0) {
-            playerTurn.innerHTML = 'Red is the winner';
-            playerTurn.style.color = 'rgb(237, 104, 104)';
-            return;
-        }
+        checkPieces(board);
+        // if (clickRow === 7) {
+        //     playerTurn.innerHTML = 'Blue is the winner';
+        //     playerTurn.style.color = 'rgb(81, 81, 225)';
+        //     return;
+        // }
+        // if (clickRow === 0) {
+        //     playerTurn.innerHTML = 'Red is the winner';
+        //     playerTurn.style.color = 'rgb(237, 104, 104)';
+        //     return;
+        // }
         currentPlayer *= -1;
         if (currentPlayer === 1) {
             playerTurn.innerHTML = `Blue's Turn`;
@@ -88,6 +92,28 @@ gameBoard.addEventListener('click', (event) => {
             playerTurn.innerHTML = `Red's Turn`;
             playerTurn.style.color = 'red';
         }
+
+        if (redPieceCounter === 0) {
+            playerTurn.innerHTML = `Blue's The Winner Yeahhhh`;
+            playerTurn.style.color = 'blue';
+            console.log('Blue Piece Won');
+        } else if (bluePieceCounter === 0) {
+            playerTurn.innerHTML = `Red's The Winner Yeahhhh`;
+            playerTurn.style.color = 'red';
+            console.log('Red Piece Won');
+        } else if (redPieceCounter !== 0 && bluePieceCounter !== 0) {
+            console.log('still playing');
+        }
+        console.log(redPieceCounter);
+        console.log(bluePieceCounter);
+        // red piece counter
+        redPlayerPiece.innerHTML = `${redPieceCounter} red piece left`;
+        redPlayerPiece.style.color = 'red';
+
+        // blue piece counter
+        bluePlayerPiece.innerHTML = `${bluePieceCounter} blue piece left`;
+        bluePlayerPiece.style.color = 'blue';
+
         playerMoving = false;
         initialClick = null;
         return;
@@ -176,18 +202,15 @@ function findValidMoves(row, column) {
     return availMoves;
 }
 
-function checkPieces() {
+function checkPieces(board) {
+    redPieceCounter = 0;
+    bluePieceCounter = 0;
     for (let i = 0; i < board.length; i++) {
         for (let j = 0; j < board[i].length; j++) {
             if (board[i][j] === -1) {
                 redPieceCounter++;
             } else if (board[i][j] === 1) {
                 bluePieceCounter++;
-            }
-            if (redPieceCounter === 0) {
-                console.log('Blue Piece Won');
-            } else if (bluePieceCounter === 0) {
-                console.log('Red Piece Won');
             }
         }
     }
