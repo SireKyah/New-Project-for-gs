@@ -28,11 +28,11 @@ Checkers is played by two opponents on opposite sides of the game board. One pla
 
 #### This is the target design
 
-![Alt text](picture/targetPic.png)
+![Alt text](Pictures/targetPic.png)
 
 #### This is the initial stage
 
-![Alt text](Pictures/WinningPic.png)
+![Alt text](Pictures/InitialStage.png)
 
 #### This is the winning page
 
