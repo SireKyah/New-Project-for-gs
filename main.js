@@ -30,8 +30,7 @@ function renderBoard() {
         for (let j = 0; j < board[i].length; j++) {
             const classSelector = `.c${i}r${j}`;
             const square = document.querySelector(classSelector);
-            // - check if a player is already occupying a board
-            //  -- If yes check which colour is it and make a piece a out of that colour and place it in that "square"
+            // board and piece colour
             if ((i + j) % 2 === 0) {
                 square.style.backgroundColor = 'black';
                 squareColor = 'blackSquare';
@@ -56,17 +55,21 @@ gameBoard.addEventListener('click', (event) => {
     const pieceColour = board[clickRow][clickColumn];
 
     if (playerMoving) {
-        // clickRow clickColumn are valid
-        // based on validMoves
-        // find the object inside validMoves with clickRow and clickColumn
-        const validMove = validMoves.find((element) => {
-            return element.row === clickRow && element.column === clickColumn;
-        });
+        const validMove = validMoves.find(
+            // check for valid Moves
+            (element) => {
+                return (
+                    element.row === clickRow && element.column === clickColumn
+                );
+            }
+        );
         console.log(validMove);
         if (!validMove) {
             console.log('cant do that');
             return;
         }
+
+        // remove pieces after capture
         board[initialClick.row][initialClick.column] = 0;
         board[clickRow][clickColumn] = currentPlayer;
         if (validMove.capture) {
@@ -74,17 +77,8 @@ gameBoard.addEventListener('click', (event) => {
         }
         renderBoard();
         checkPieces(board);
-        // if (clickRow === 7) {
-        //     playerTurn.innerHTML = 'Blue is the winner';
-        //     playerTurn.style.color = 'rgb(81, 81, 225)';
-        //     return;
-        // }
-        // if (clickRow === 0) {
-        //     playerTurn.innerHTML = 'Red is the winner';
-        //     playerTurn.style.color = 'rgb(237, 104, 104)';
-        //     return;
-        // }
         currentPlayer *= -1;
+        // Html element
         if (currentPlayer === 1) {
             playerTurn.innerHTML = `Blue's Turn`;
             playerTurn.style.color = 'blue';
@@ -121,6 +115,8 @@ gameBoard.addEventListener('click', (event) => {
 
     validMoves = findValidMoves(clickRow, clickColumn);
     console.log(validMoves);
+
+    // check the initial click
     if (currentPlayer === pieceColour && validMoves.length) {
         console.log('You can move');
         playerMoving = true;
@@ -144,6 +140,8 @@ function findValidMoves(row, column) {
             { row: row + 1, column: column - 1, dir: 'sw' },
         ];
 
+        // capturing for Red piece player
+
         for (let m of moves) {
             const piece = board[m.row] && board[m.row][m.column];
             if (piece === 0 && m.dir.startsWith('n')) {
@@ -151,15 +149,20 @@ function findValidMoves(row, column) {
                 availMoves.push(m);
             } else if (m.row && piece === 1) {
                 let move;
+                // capturing for North Eats
                 if (m.dir === 'ne') {
                     move = { row: m.row - 1, column: m.column + 1 };
+                    // capturing for North West
                 } else if (m.dir === 'nw') {
                     move = { row: m.row - 1, column: m.column - 1 };
+                    // Capturing backwards for South East
                 } else if (m.dir === 'se') {
                     move = { row: m.row + 1, column: m.column + 1 };
+                    // Capturing backwards for South West
                 } else if (m.dir === 'sw') {
                     move = { row: m.row + 1, column: m.column - 1 };
                 }
+                // Capturing and deleting piece
                 if (board[move.row][move.column] === 0) {
                     delete m.dir;
                     move.capture = m;
@@ -174,7 +177,7 @@ function findValidMoves(row, column) {
             { row: row - 1, column: column - 1, dir: 'nw' },
             { row: row - 1, column: column + 1, dir: 'ne' },
         ];
-
+        // capturing for Blue piece player
         for (let m of moves) {
             const piece = board[m.row] && board[m.row][m.column];
             if (piece === 0 && m.dir.startsWith('s')) {
@@ -202,6 +205,7 @@ function findValidMoves(row, column) {
     return availMoves;
 }
 
+// Counting Piece
 function checkPieces(board) {
     redPieceCounter = 0;
     bluePieceCounter = 0;
@@ -216,25 +220,3 @@ function checkPieces(board) {
     }
 }
 renderBoard();
-
-// for taking piecess
-// -- see if current piece can go behind the other piece
-// -- if yes, take the current position of the currentPiece and move it behind the taken piece.
-// -- remove the taken piece and make it the next player turn
-
-// Add The piece
-//   --- Then make it the next players turn
-//  -- If no make it that the "square" is empty.
-// - Move the pieces
-//  -- Move the pieces and delete the previous piece
-//  -- if pieces can eat a different colour pieces, move the new pieces behind the eaten pieces and remove the other pieces to the board and also the previous pieces.
-//   --- if pieces can eat more than one enemy pieces, eat all the enemy pieces and leave the piece that ate the enemy pieces behind the last enemy piece.
-// - Only make the pieces move sideways
-// - Only make the pieces move forward
-// - Only make a pieces that reaches the end of the board have the ability to move backwards
-// - Check winner
-// -- Make the player without any pieces lose and vice versa
-// --- Display a Which player won
-// ---- Add a restart a button after a winner is selected.
-// Add The Reset botton
-// - when the reset botton is pressed, make the board back to its original places

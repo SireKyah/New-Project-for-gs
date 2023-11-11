@@ -10,7 +10,7 @@ body {
     width: 800px;
     height: 800px;
     margin: 0 auto;
-    background-color: white;
+    background-color: rgb(70, 36, 36);
     display: grid;
     grid-template-columns: repeat(8, 100px);
     grid-template-rows: repeat(8, 100px);
@@ -25,17 +25,17 @@ body {
 }
 
 .red-player-piece {
-    text-align: start;
+    float: right;
     margin-bottom: 10px;
     color: rgb(237, 104, 104);
-    font-size: 50px;
+    font-size: 40px;
 }
 
 .blue-player-piece {
-    text-align: end;
+    float: left;
     margin-bottom: 10px;
     color: rgb(68, 105, 224);
-    font-size: 50px;
+    font-size: 40px;
 }
 
 .title {
